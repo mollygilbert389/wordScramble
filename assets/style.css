@@ -1,0 +1,40 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body::after {
+    content: "";
+    background: url("../questionMarks.jpg");
+    opacity: 0.2;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1; 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.boxStyle {
+    background-color: lightcoral;
+    margin: 10px;
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 15%;
+    border-radius: 8px;
+    border-style: none none solid none;
+    border-color: rgb(71, 70, 67);
+    padding: 10px;
+}
+
+#directions {
+    margin-top: 10%;
+}
+
+#displayBox {
+    font-size: 25px;
+}
+
+

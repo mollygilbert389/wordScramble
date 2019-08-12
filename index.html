@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Letter Challenge</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    
+    
+</head>
+<body>
+    
+    <div class="boxStyle" id="directions">
+            <!-- Modal 
+    Have a modal appear with a form asking for name and amount of players to play aginst
+    -->
+        Game Rules and breakdown: Want to play? Make some friends. Use this link to get players into the game. Once all players have clicked play the game will begin. You will have 1 minute to unscramble as many words as possible. Your opponent(s) will also be competeing against you for every word. If you guess the word correctly first you get a point and the next word will appear. Good luck to the strongest player!  
+    </div>
+
+        <!-- Waiting for players loading 
+    Have a loader while other plays login
+    -->
+    <div class="boxStyle" id="timer">Time till start: 10</div>
+    <!-- "You have now entered the game, once this timer his 0 your letters will appear, and you need to spell as manay words as possible with this scramble."
+    -->
+    <div class="boxStyle" id="displayBox">Your scrambled word will appear here!</div>
+
+    <div class="boxStyle" id="userGuessBox">
+    <input id="userGuess" type="text" name="guess" placeholder="You type here"> 
+
+    <input id="wordGuess" type="submit">
+    </div>
+
+    <div class="boxStyle" id="roundWinner">Winner:</div>
+
+    <div class="boxStyle" id="score">Score:</div>
+
+
+</body>
+
+<script type="text/javascript" src="assets/app.js"></script>
+
+</html>
