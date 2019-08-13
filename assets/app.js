@@ -2,8 +2,6 @@
 //click "play" loader "waiting for other players starts to load" to get players send them this link:x
 //once players are in there is a count down with instructions
 
-//play again?
-
 //fun additional rules?
 
 //wordbank rules: 
@@ -14,7 +12,7 @@ $(document).ready(function(){
 
 //VARIABLE LIST
 
-    var letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Pie", "Salsa", "Cheese", "Egg", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Tea", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Oil", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour"]
+    var letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"]
 
     var chosenWord = "";
     var score = 0
@@ -25,8 +23,11 @@ $(document).ready(function(){
 //GAME FUNCTION
 loading()
 
-////////////////////////////////////FUNCTIONS///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////FUNCTIONS/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////
 /////Gets timer for 60 seconds going
 function playGame () {
     var gameTime = 10
@@ -51,6 +52,7 @@ function playGame () {
 
 }
 
+/////////////////////////////////////////////////////////////
 ///ONCLICK EVENT THAT RECORDS SCORE
     $("#wordGuess").on("click", function () {
         var userGuess = $("#userGuess").val().trim().toLowerCase()
@@ -69,6 +71,7 @@ function playGame () {
 
     })
 
+/////////////////////////////////////////////////////////////
 ////Chooses and scrambles a word from the word bank
     function chooseWord() {
         chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)]
@@ -81,6 +84,7 @@ function playGame () {
         $("#displayBox").append(scrambledWord)
     }
 
+/////////////////////////////////////////////////////////////
 ////Function that is triggered once the play button is clicked
     function loading() {
         var counter = 10
@@ -99,8 +103,8 @@ function playGame () {
         }
 
     }
-
-    ///Final results section
+/////////////////////////////////////////////////////////////
+    ///Final results section and play again
     function showWinner() {
         modal = $("#myModal")
         message = $("#modalWinner")
@@ -118,9 +122,6 @@ function playGame () {
             modal.hide()
             location.reload()
         }) 
-        // window.onclick = function() {
-        //     modal.hide()
-        // }
     }
     
 })
