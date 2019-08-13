@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +9,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="assets/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-    
-    
+
+
 </head>
+
 <body>
-    
+
     <div class="boxStyle" id="directions">
-            <!-- Modal 
+        <!-- Modal 
     Have a modal appear with a form asking for name and amount of players to play aginst
     -->
-        Game Rules and breakdown: Want to play? Make some friends. Use this link to get players into the game. Once all players have clicked play the game will begin. You will have 1 minute to unscramble as many words as possible. Your opponent(s) will also be competeing against you for every word. If you guess the word correctly first you get a point and the next word will appear. Good luck to the strongest player!  
+        Game Rules and breakdown: Want to play? Make some friends. Use this link to get players into the game. Once all
+        players have clicked play the game will begin. You will have 1 minute to unscramble as many words as possible.
+        Your opponent(s) will also be competeing against you for every word. If you guess the word correctly first you
+        get a point and the next word will appear. Good luck to the strongest player!
     </div>
 
-        <!-- Waiting for players loading 
+    <!-- Waiting for players loading 
     Have a loader while other plays login
     -->
     <div class="boxStyle" id="timer">Time till start: 10</div>
@@ -29,15 +34,25 @@
     <div class="boxStyle" id="displayBox">Your scrambled word will appear here!</div>
 
     <div class="boxStyle" id="userGuessBox">
-    <input id="userGuess" type="text" name="guess" placeholder="You type here"> 
+        <form name="gameForm" onsubmit="return false">
+            <input id="userGuess" type="text" name="guess" placeholder="You type here">
 
-    <input id="wordGuess" type="submit">
+            <input id="wordGuess" type="reset" value="Submit">
+        </form>
     </div>
 
     <div class="boxStyle" id="roundWinner">Winner:</div>
 
     <div class="boxStyle" id="score">Score:</div>
 
+        <!-- Winner Modal -->
+        <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" id="closeBtn">&times;</span>
+                    <p id="modalWinner">Some text in the Modal..</p>
+                </div>
+        
+            </div>
 
 </body>
 

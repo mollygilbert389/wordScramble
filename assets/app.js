@@ -1,10 +1,7 @@
 //create a login?
 //click "play" loader "waiting for other players starts to load" to get players send them this link:x
 //once players are in there is a count down with instructions
-//after 10 seconds are up scambled word appears
-//player who enters the word in correctly first win 1 point
-//new round starts
-//after 1 min a winner is declared
+
 //play again?
 
 //fun additional rules?
@@ -20,15 +17,21 @@ $(document).ready(function(){
     var letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Pie", "Salsa", "Cheese", "Egg", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Tea", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Oil", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour"]
 
     var chosenWord = "";
-    var playerOne = 0
+    var score = 0
+    var winner = "Molly"
+
+
 
 //GAME FUNCTION
 loading()
 
-//FUNCTIONS
+////////////////////////////////////FUNCTIONS///////////////////////////////////////
+
+/////Gets timer for 60 seconds going
 function playGame () {
     var gameTime = 60
 
+    $("#userGuessBox").show()
     $("#directions").empty();
     $("#directions").append("GO!")
     console.log("It has been 10 seconds")
@@ -48,21 +51,25 @@ function playGame () {
 
 }
 
+///ONCLICK EVENT THAT RECORDS SCORE
     $("#wordGuess").on("click", function () {
         var userGuess = $("#userGuess").val().trim().toLowerCase()
+        var frm = document.getElementsByName('gameForm')[0];
         if (userGuess === chosenWord) {
-            alert("Correct")
-            playerOne++
-            $("#userGuess").reset()
-            console.log(playerOne)
+            score++
+            $("#score").empty()
+            $("#score").append("Score: " + score)
+
+            console.log(score)
             chooseWord()
+            frm.reset()
         } else {
-            alert("Try again!")
-            $("#userGuess").reset()
+            frm.reset()
         }
 
     })
 
+////Chooses and scrambles a word from the word bank
     function chooseWord() {
         chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)]
         $("#displayBox").empty()
@@ -74,11 +81,12 @@ function playGame () {
         $("#displayBox").append(scrambledWord)
     }
 
+////Function that is triggered once the play button is clicked
     function loading() {
         var counter = 10
         $("#directions").empty();
         $("#directions").append("You have entered the game! You will now have 10 seconds to prepare. Rules: you will be competing with another play to guess the correct word from the scrambled letters below. Once a player guesses the correct word a new word will appear. Good Luck!")
-
+        $("#userGuessBox").hide()
         timer = setInterval(countDown,  1000);
         
         function countDown() {
@@ -92,8 +100,20 @@ function playGame () {
 
     }
 
+    ///Final results section
     function showWinner() {
-        console.log("Someone has won!")
+        modal = $("#myModal")
+        btn = $("#closeBtn")
+        message = $("#modalWinner")
+        message.empty()
+        message.append("We have a winner! " + winner + " Final Score: " + score)
+        modal.show()
+        btn.onlclick = function() {
+            modal.hide()
+        }
+        window.onclick = function() {
+            modal.hide()
+        }
     }
     
 })
