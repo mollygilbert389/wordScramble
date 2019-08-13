@@ -57,6 +57,9 @@ body::after {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border-radius: 8px;
   }
   
   .close {
@@ -73,13 +76,25 @@ body::after {
     cursor: pointer;
   }
 
-  #playAgain {
+  .clicky {
       border-radius: 8px;
       background-color:  lightcoral;
-      color: white;
       font-family: 'Montserrat', sans-serif;
       border-style: none;
       padding: 5px;
+      display: block;
+      margin: auto;
+      border-style: none none solid none;
+      border-color: rgb(71, 70, 67);
   }
 
+  /* play button modal styling */
+  #playModalContent {
+    margin-top: 9%;
+    padding-top: 110px;
+    padding-bottom: 110px;
+    background-color: rgb(91, 190, 247);
+  }
+
+  
 

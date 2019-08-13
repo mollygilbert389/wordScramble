@@ -14,23 +14,33 @@
 </head>
 
 <body>
-
-    <div class="boxStyle" id="directions">
-        <!-- Modal 
+    <!-- Modal 
     Have a modal appear with a form asking for name and amount of players to play aginst
     -->
-        Game Rules and breakdown: Want to play? Make some friends. Use this link to get players into the game. Once all
-        players have clicked play the game will begin. You will have 1 minute to unscramble as many words as possible.
-        Your opponent(s) will also be competeing against you for every word. If you guess the word correctly first you
-        get a point and the next word will appear. Good luck to the strongest player!
+
+    <!--Player Finding Modal-->
+    <div id="playModal" class="modal">
+        <div id="playModalContent" class="modal-content">
+            <div class="boxStyle" id="modalDirections">
+                Game Rules and breakdown: Want to play? Make some friends. Use this link to get players into the game.
+                Once all players have clicked play the game will begin. You will have 1 minute to unscramble as many words as
+                possible. Your opponent(s) will also be competeing against you for every word. If you guess the word correctly
+                first you get a point and the next word will appear. Good luck to the strongest player!
+            </div>
+
+            <div class="boxStyle" id="linkdiv">Share this link with other players!</div>
+            <button id="startBtn" class="clicky">Click to Play!</button>
+                <!-- Modal hides once another player clicks play-->
+        </div>
+
     </div>
 
-    <!-- Waiting for players loading 
-    Have a loader while other plays login
-    -->
+    <div class="boxStyle" id="directions">You have entered the game! You will now have 10 seconds to prepare. Rules: you will be competing with another play to guess the correct word from the scrambled letters below. Once a player guesses the correct word a new word will appear. Good Luck!</div>
+
+
+    <!-- Game Play Screen -->
     <div class="boxStyle" id="timer">Time till start: 10</div>
-    <!-- "You have now entered the game, once this timer his 0 your letters will appear, and you need to spell as manay words as possible with this scramble."
-    -->
+
     <div class="boxStyle" id="displayBox">Your scrambled word will appear here!</div>
 
     <div class="boxStyle" id="userGuessBox">
@@ -43,15 +53,15 @@
 
     <div class="boxStyle" id="score">Score:</div>
 
-        <!-- Winner Modal -->
-        <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" id="closeBtn">&times;</span>
-                    <p id="modalWinner"></p>
-                    <button id="playAgain">Play Again?</button>
-                </div>
-        
-            </div>
+    <!-- Winner Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeBtn">&times;</span>
+            <p id="modalWinner"></p>
+            <button id="playAgain" class="clicky">Play Again?</button>
+        </div>
+
+    </div>
 
 </body>
 

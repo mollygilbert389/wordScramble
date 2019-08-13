@@ -16,7 +16,11 @@ $(document).ready(function(){
 
 
 //GAME FUNCTION
-loading()
+$("#playModal").show()
+$("#startBtn").on ("click", function(){
+    loading()
+})
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////FUNCTIONS/////////////////////////////////////////////////
@@ -82,9 +86,8 @@ function playGame () {
 /////////////////////////////////////////////////////////////
 ////Function that is triggered once the play button is clicked
     function loading() {
+        $("#playModal").hide()
         var counter = 10
-        $("#directions").empty();
-        $("#directions").append("You have entered the game! You will now have 10 seconds to prepare. Rules: you will be competing with another play to guess the correct word from the scrambled letters below. Once a player guesses the correct word a new word will appear. Good Luck!")
         $("#userGuessBox").hide()
         timer = setInterval(countDown,  1000);
         
