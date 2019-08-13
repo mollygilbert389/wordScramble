@@ -29,7 +29,7 @@ loading()
 
 /////Gets timer for 60 seconds going
 function playGame () {
-    var gameTime = 60
+    var gameTime = 10
 
     $("#userGuessBox").show()
     $("#directions").empty();
@@ -110,14 +110,13 @@ function playGame () {
         $("#playAgain").on("click", function() {
             console.log("This button was clicked")
             modal.hide()
-            $("#displayBox").empty()
-            $("#displayBox").append("Your scrambled word will appear here!")
-            loading()
+            location.reload()
         })
 
         $("#closeBtn").on("click", function(){
             console.log("I")
             modal.hide()
+            location.reload()
         }) 
         // window.onclick = function() {
         //     modal.hide()
