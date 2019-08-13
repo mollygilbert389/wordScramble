@@ -106,7 +106,7 @@ function playGame () {
         btn = $("#closeBtn")
         message = $("#modalWinner")
         message.empty()
-        message.append("We have a winner! " + winner + " Final Score: " + score)
+        message.append("We have a winner! Final Score: " + score)
         modal.show()
         btn.onlclick = function() {
             modal.hide()
