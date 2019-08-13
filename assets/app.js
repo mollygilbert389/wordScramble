@@ -29,7 +29,7 @@ loading()
 
 /////Gets timer for 60 seconds going
 function playGame () {
-    var gameTime = 10
+    var gameTime = 60
 
     $("#userGuessBox").show()
     $("#directions").empty();
