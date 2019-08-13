@@ -1,12 +1,7 @@
 //create a login?
 //click "play" loader "waiting for other players starts to load" to get players send them this link:x
-//once players are in there is a count down with instructions
 
 //fun additional rules?
-
-//wordbank rules: 
-//Words must be scrambled with with a minimum of  two vowels and two consonants each time.
-//create an array with preset works already and JS scramble the words
 
 $(document).ready(function(){
 
@@ -30,7 +25,7 @@ loading()
 /////////////////////////////////////////////////////////////
 /////Gets timer for 60 seconds going
 function playGame () {
-    var gameTime = 10
+    var gameTime = 60
 
     $("#userGuessBox").show()
     $("#directions").empty();
