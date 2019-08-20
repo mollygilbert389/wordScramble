@@ -9,28 +9,39 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="assets/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    
 
 
 </head>
 
 <body>
-    <!-- Modal 
-    Have a modal appear with a form asking for name and amount of players to play aginst
-    -->
+    
+    <div id="userNameModal" class="modal">
+        <div class="modal-content">
+            <h1>In order to play Word Scramble enter a username!</h1>
+            <input id="userName" type="text" placeholder="username">
+            <button class="clicky" id="userEnter">Submit</button>
+        </div>
+    </div>
 
-    <!--Player Finding Modal-->
     <div id="playModal" class="modal">
         <div id="playModalContent" class="modal-content">
             <div class="boxStyle" id="modalDirections">
-                Game Rules and breakdown: Want to play? Make some friends. Use this link to get players into the game.
-                Once all players have clicked play the game will begin. You will have 1 minute to unscramble as many words as
-                possible. Your opponent(s) will also be competeing against you for every word. If you guess the word correctly
-                first you get a point and the next word will appear. Good luck to the strongest player!
+                Game Rules and breakdown: Click an availible player in the table below, should they accept your challenge you will have 1 minute to unscramble as many words as possible. Your opponent will also be competeing against you for every word. If you guess the word correctly
+                first you get a point and the next word will appear.
             </div>
 
-            <div class="boxStyle" id="linkdiv">Share this link with other players!</div>
-            <button id="startBtn" class="clicky">Click to Play!</button>
-                <!-- Modal hides once another player clicks play-->
+            <div class="boxStyle" id="linkdiv"><p class="opptitles">Display Name: <span id="challengename"></span></p>
+                <div id="btn-center">
+                    <button id="challenge" class="clicky">Challenge</button></div>
+
+                <div id="challenged" class="modal-content">
+                    <p>You have been challenged by: <span id="challenger"></span></p>
+                    <button id="accept">Accept</button>
+                    <button id="decline">Decline</button>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -66,5 +77,7 @@
 </body>
 
 <script type="text/javascript" src="assets/app.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 </html>

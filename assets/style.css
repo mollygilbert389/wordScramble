@@ -96,5 +96,12 @@ body::after {
     background-color: rgb(91, 190, 247);
   }
 
-  
+#userNameModal {
+  z-index: 10;
+  text-align: center;
+  background-color: rgb(91, 190, 247);
+}
 
+input{
+  margin-bottom: 10px;
+}
