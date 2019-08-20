@@ -7,13 +7,15 @@ $(document).ready(function () {
 
     //VARIABLE LIST
 
-    var letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"]
+    const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"]
 
-    var chosenWord = "";
-    var score = 0
+    let chosenWord = "";
+    let score = 0;
+    let playerA;
+    let playerB;
 
     //DataBase
-    var firebaseConfig = {
+    const firebaseConfig = {
         apiKey: "AIzaSyBk-HzAE2olUa1KlLCywC131FRIqkU9Yjg",
         authDomain: "wordscramble-f6df6.firebaseapp.com",
         databaseURL: "https://wordscramble-f6df6.firebaseio.com",
@@ -24,11 +26,11 @@ $(document).ready(function () {
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    var database = firebase.database()
-    var connectionsRef = database.ref("/connections");
-    var connectedRef = database.ref(".info/connected");
+    const database = firebase.database();
+    // const connectionsRef = database.ref("/connections");
+    // const connectedRef = database.ref(".info/connected");
 
-    var player = {
+    let player = {
         myID: null,
         myDisplayName: null,
         opponentID: null,
@@ -41,33 +43,31 @@ $(document).ready(function () {
         gameStatus: false,
         waiting: false, 
         choice: null,
-    }
+    };
 
     //GAME FUNCTION
-    $("#userNameModal").show()
-    //get username to post to db
-    //add enter game functionality once player is clicked
+    $("#userNameModal").show();
     $("#userEnter").on("click", function () {
-    myDisplayName = $("#userName").val().trim()
+    myDisplayName = $("#userName").val().trim();
         if (myDisplayName != "") {
-            $("#userNameModal").hide()
-            $("#linkdiv").empty()
-            var initialRow = $("<tr>");
-            var name = $("<th>").text("Player Name:" + myDisplayName)
-            var status = $("<th>").text("Status:")
-            initialRow.append(name, status)
-            $("#linkdiv").append(initialRow)
+            $("#userNameModal").hide();
+            $("#linkdiv").empty();
+            let initialRow = $("<tr>");
+            let name = $("<th>").text("Player Name:" + myDisplayName);
+            let status = $("<th>").text("Status:");
+            initialRow.append(name, status);
+            $("#linkdiv").append(initialRow);
 
-            for (var i = 0; i < player.playerIDs.length; i++) {
-                var newRow = $("<tr>");
-                var name = $("<td>").text(player.players[player.playerIDs[i]].displayName);
-                var status = $("<td>").text(player.players[game.playerIDs[i]].status);
+            for (let i = 0; i < player.playerIDs.length; i++) {
+                let newRow = $("<tr>");
+                let name = $("<td>").text(player.players[player.playerIDs[i]].displayName);
+                let status = $("<td>").text(player.players[game.playerIDs[i]].status);
                 newRow.append(name, status);
                 newRow.attr("id", player.playerIDs[i]);
 
                 newRow.on("click", function () {
                     if (this.id != player.myID) {
-                        player.opponentID = this.id
+                        player.opponentID = this.id;
                         player.oppDisplayName = player.players[player.opponentID].displayName;
                         $("#challengename").text(player.players[player.opponentID].displayName);
                     }
@@ -76,19 +76,19 @@ $(document).ready(function () {
             }
         }
         else {
-            alert("Please enter a username to play")
+            alert("Please enter a username to play");
         }
 
-    })
-    $("#playModal").show()
-    $("#challenged").hide()
+    });
+    $("#playModal").show();
+    $("#challenged").hide();
     $("#challenge").on("click", function () {
-        loading()
+        loading();
     })
 
     connectedRef.on("value", function(snap) {
         if (snap.val()) {
-            var playerID = assignPlayer();
+            let playerID = assignPlayer();
             playerID.onDisconnect().remove();
         }
     });
@@ -100,89 +100,89 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     function playGame() {
-        var gameTime = 60
+        let gameTime = 60;
 
-        $("#userGuessBox").show()
+        $("#userGuessBox").show();
         $("#directions").empty();
         $("#directions").append("GO!")
-        console.log("It has been 10 seconds")
-        chooseWord()
-        console.log(chosenWord)
-        $("#timer").html("Time Left in the Game: " + gameTime)
+        console.log("It has been 10 seconds");
+        chooseWord();
+        console.log(chosenWord);
+        $("#timer").html("Time Left in the Game: " + gameTime);
         newTimer = setInterval(gameCountdown, 1000);
 
         function gameCountdown() {
-            gameTime--
-            $("#timer").html("Time Left in the Game: " + gameTime)
+            gameTime--;
+            $("#timer").html("Time Left in the Game: " + gameTime);
             if (gameTime <= 0) {
-                clearInterval(newTimer)
-                showWinner()
+                clearInterval(newTimer);
+                showWinner();
             }
         }
 
     }
 
     $("#wordGuess").on("click", function () {
-        var userGuess = $("#userGuess").val().trim().toLowerCase()
-        var frm = document.getElementsByName('gameForm')[0];
+        let userGuess = $("#userGuess").val().trim().toLowerCase();
+        let frm = document.getElementsByName('gameForm')[0];
         if (userGuess === chosenWord) {
-            score++
-            $("#score").empty()
-            $("#score").append("Score: " + score)
+            score++;
+            $("#score").empty();
+            $("#score").append("Score: " + score);
 
-            console.log(score)
-            chooseWord()
-            frm.reset()
+            console.log(score);
+            chooseWord();
+            frm.reset();
         } else {
-            frm.reset()
+            frm.reset();
         }
 
     })
 
     function chooseWord() {
         chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)]
-        $("#displayBox").empty()
-        chosenWord = chosenWord.toLowerCase()
-        scrambledWord = chosenWord.split("")
-        console.log(scrambledWord)
-        scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('')
-        console.log(scrambledWord)
-        $("#displayBox").append(scrambledWord)
+        $("#displayBox").empty();
+        chosenWord = chosenWord.toLowerCase();
+        scrambledWord = chosenWord.split("");
+        console.log(scrambledWord);
+        scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
+        console.log(scrambledWord);
+        $("#displayBox").append(scrambledWord);
     }
 
     function loading() {
-        $("#playModal").hide()
-        var counter = 10
-        $("#userGuessBox").hide()
+        $("#playModal").hide();
+        let counter = 10;
+        $("#userGuessBox").hide();
         timer = setInterval(countDown, 1000);
 
         function countDown() {
-            counter--
-            $("#timer").html("Time till start: " + counter)
+            counter--;
+            $("#timer").html("Time till start: " + counter);
             if (counter <= 0) {
-                clearInterval(timer)
-                playGame()
+                clearInterval(timer);
+                playGame();
             }
         }
 
     }
 
     function showWinner() {
-        modal = $("#myModal")
-        message = $("#modalWinner")
-        message.empty()
-        message.append("We have a winner! Final Score: " + score)
-        modal.show()
+        modal = $("#myModal");
+        message = $("#modalWinner");
+        message.empty();
+        message.append("We have a winner! Final Score: " + score);
+        modal.show();
         $("#playAgain").on("click", function () {
-            console.log("This button was clicked")
-            modal.hide()
-            location.reload()
+            console.log("This button was clicked");
+            modal.hide();
+            location.reload();
         })
 
         $("#closeBtn").on("click", function () {
-            console.log("I")
-            modal.hide()
-            location.reload()
+            console.log("I");
+            modal.hide();
+            location.reload();
         })
     }
 
@@ -193,9 +193,9 @@ $(document).ready(function () {
             opponent: null,
             status: "Free",
             choice: null
-        }
-        console.log(newplayer)
-        var playerId = database.ref("/players").push(newplayer)
+        };
+        console.log(newplayer);
+        let playerId = database.ref("/players").push(newplayer);
         player.myID = playerId.path.pieces_[1];
         return playerId;
     }
@@ -205,18 +205,15 @@ $(document).ready(function () {
     function checkAvailible() {
         if (player.players[player.myID].status == "Busy" && PaymentRequest.players[game.myID].opponent != null) {
             player.gameStatus = true;
-            gameResponse()
+            gameResponse();
         }
     }
 
     function gameResponse() {
-        player.opponentID = player.players[player.myID].opponent
-        var oppName = player.players[player.opponentID].displayName
+        player.opponentID = player.players[player.myID].opponent;
+        let oppName = player.players[player.opponentID].displayName;
         $("#challenger").text(oppname);
-        $("#challenged").attr("style", "display: block;")
-        ///
-        // $("myModal").attr("style", "display: block;")
-
+        $("#challenged").attr("style", "display: block;");
 
     }
 
