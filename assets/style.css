@@ -88,6 +88,18 @@ body::after {
       border-color: rgb(71, 70, 67);
   }
 
+  .clickyGame {
+    background-color: rgb(91, 190, 247);
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    border-style: none;
+    padding: 5px;
+    display: block;
+    margin: auto;
+    border-style: none none solid none;
+    border-color: rgb(71, 70, 67);
+}
+
   /* play button modal styling */
   #playModalContent {
     margin-top: 9%;

@@ -27,23 +27,7 @@ $(document).ready(function () {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    // const connectionsRef = database.ref("/connections");
-    // const connectedRef = database.ref(".info/connected");
-
-    let player = {
-        myID: null,
-        myDisplayName: null,
-        opponentID: null,
-        oppDisplayName: null,
-        oppChoice: "",
-        oppReady: false,
-        myConnect: [],
-        players: {},
-        playerIDs: [],
-        gameStatus: false,
-        waiting: false, 
-        choice: null,
-    };
+    ref = database.ref("/play")
 
     //GAME FUNCTION
     $("#userNameModal").show();
@@ -52,28 +36,7 @@ $(document).ready(function () {
         if (myDisplayName != "") {
             $("#userNameModal").hide();
             $("#linkdiv").empty();
-            let initialRow = $("<tr>");
-            let name = $("<th>").text("Player Name:" + myDisplayName);
-            let status = $("<th>").text("Status:");
-            initialRow.append(name, status);
-            $("#linkdiv").append(initialRow);
-
-            for (let i = 0; i < player.playerIDs.length; i++) {
-                let newRow = $("<tr>");
-                let name = $("<td>").text(player.players[player.playerIDs[i]].displayName);
-                let status = $("<td>").text(player.players[game.playerIDs[i]].status);
-                newRow.append(name, status);
-                newRow.attr("id", player.playerIDs[i]);
-
-                newRow.on("click", function () {
-                    if (this.id != player.myID) {
-                        player.opponentID = this.id;
-                        player.oppDisplayName = player.players[player.opponentID].displayName;
-                        $("#challengename").text(player.players[player.opponentID].displayName);
-                    }
-                })
-                $("#linkdiv").append(newRow);
-            }
+            createGame()
         }
         else {
             alert("Please enter a username to play");
@@ -81,23 +44,39 @@ $(document).ready(function () {
 
     });
     $("#playModal").show();
-    $("#challenged").hide();
-    $("#challenge").on("click", function () {
-        loading();
-    })
-
-    connectedRef.on("value", function(snap) {
-        if (snap.val()) {
-            let playerID = assignPlayer();
-            playerID.onDisconnect().remove();
-        }
-    });
 
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////FUNCTIONS/////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
+
+    function createGame() {
+        $("#createGame").on("click", function(){
+        let newGameButton = $("<button>");
+        newGameButton.addClass("clickyGame")
+        newGameButton.append(myDisplayName + "'s Game");
+        $("#linkdiv").append(newGameButton);
+        database.ref().push({
+            myDisplayName: myDisplayName,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP,
+            compete: null
+            });
+        
+        newGameButton.on("click", function(){ 
+            console.log("I was clicked!")
+            joinGame()
+        }) 
+    })
+    }
+
+    function joinGame() {
+        compete = myDisplayName
+        console.log(myDisplayName)
+        database.ref().push({
+            compete: myDisplayName
+            });
+    }
 
     function playGame() {
         let gameTime = 60;
@@ -117,10 +96,10 @@ $(document).ready(function () {
             if (gameTime <= 0) {
                 clearInterval(newTimer);
                 showWinner();
-            }
-        }
+            };
+        };
 
-    }
+    };
 
     $("#wordGuess").on("click", function () {
         let userGuess = $("#userGuess").val().trim().toLowerCase();
@@ -135,9 +114,9 @@ $(document).ready(function () {
             frm.reset();
         } else {
             frm.reset();
-        }
+        };
 
-    })
+    });
 
     function chooseWord() {
         chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)]
@@ -148,10 +127,11 @@ $(document).ready(function () {
         scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
         console.log(scrambledWord);
         $("#displayBox").append(scrambledWord);
-    }
+    };
 
     function loading() {
         $("#playModal").hide();
+        createGame()
         let counter = 10;
         $("#userGuessBox").hide();
         timer = setInterval(countDown, 1000);
@@ -162,10 +142,10 @@ $(document).ready(function () {
             if (counter <= 0) {
                 clearInterval(timer);
                 playGame();
-            }
-        }
+            };
+        };
 
-    }
+    };
 
     function showWinner() {
         modal = $("#myModal");
@@ -177,44 +157,13 @@ $(document).ready(function () {
             console.log("This button was clicked");
             modal.hide();
             location.reload();
-        })
+        });
 
         $("#closeBtn").on("click", function () {
             console.log("I");
             modal.hide();
             location.reload();
-        })
-    }
+        });
+    };
 
-    function assignPlayer() {
-        newplayer = {
-            myDisplayName: player.myDisplayName,
-            challenge: false,
-            opponent: null,
-            status: "Free",
-            choice: null
-        };
-        console.log(newplayer);
-        let playerId = database.ref("/players").push(newplayer);
-        player.myID = playerId.path.pieces_[1];
-        return playerId;
-    }
-
-    //TO CALL
-
-    function checkAvailible() {
-        if (player.players[player.myID].status == "Busy" && PaymentRequest.players[game.myID].opponent != null) {
-            player.gameStatus = true;
-            gameResponse();
-        }
-    }
-
-    function gameResponse() {
-        player.opponentID = player.players[player.myID].opponent;
-        let oppName = player.players[player.opponentID].displayName;
-        $("#challenger").text(oppname);
-        $("#challenged").attr("style", "display: block;");
-
-    }
-
-})
+});
