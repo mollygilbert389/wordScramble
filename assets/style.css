@@ -98,6 +98,7 @@ body::after {
     margin: auto;
     border-style: none none solid none;
     border-color: rgb(71, 70, 67);
+    margin-top: 10px;
 }
 
   /* play button modal styling */

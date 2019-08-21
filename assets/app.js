@@ -10,9 +10,9 @@ $(document).ready(function () {
     const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"]
 
     let chosenWord = "";
-    let score = 0;
-    let playerA;
-    let playerB;
+    let playerAScore = 0;
+    let playerBScore = 0;
+    let players = [];
 
     //DataBase
     const firebaseConfig = {
@@ -26,8 +26,8 @@ $(document).ready(function () {
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    ref = database.ref("/play")
+    // const database = firebase.database();
+    // ref = database.ref("/play")
 
     //GAME FUNCTION
     $("#userNameModal").show();
@@ -45,51 +45,57 @@ $(document).ready(function () {
     });
     $("#playModal").show();
 
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////FUNCTIONS/////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     function createGame() {
+        players = [];
         $("#createGame").on("click", function(){
-        let newGameButton = $("<button>");
-        newGameButton.addClass("clickyGame")
-        newGameButton.append(myDisplayName + "'s Game");
-        $("#linkdiv").append(newGameButton);
-        database.ref().push({
+        firebase.database().ref().push({
             myDisplayName: myDisplayName,
-            dateAdded: firebase.database.ServerValue.TIMESTAMP,
-            compete: null
+            opponent: "Nothing Yet",
+            playerAScore: playerAScore,
+            playerBScore: playerBScore
             });
-        
-        newGameButton.on("click", function(){ 
-            console.log("I was clicked!")
-            joinGame()
-        }) 
     })
+    firebase.database().ref().on("child_added", function(childsnapshot){
+        $("#linkdiv").append("<button class='clickyGame' data-name='" + childsnapshot.val().myDisplayName + "'" + ">" + childsnapshot.val().myDisplayName + "'s Game " + "</button>")
+        console.log(childsnapshot.val().myDisplayName)
+        //figure out why undefined buttons are appearing
+        $(".clickyGame").on("click", function(){
+        name = $(this).data("name")
+        players.push(name)
+        joinGame()
+        })
+    })
+
     }
 
     function joinGame() {
-        compete = myDisplayName
-        console.log(myDisplayName)
-        database.ref().push({
-            compete: myDisplayName
-            });
-    }
+        let playerA = players[0]
+        let playerB = myDisplayName
+        if (playerA != playerB) {
+            firebase.database().ref().set({
+            myDisplayName: playerA,
+            opponent: playerB,
+            playerAScore: playerAScore,
+            playerBScore: playerBScore
+        });
+            loading();
+        } else {
+            alert("You can't play yourself!")
+        }
+    } 
 
     function playGame() {
         let gameTime = 60;
-
         $("#userGuessBox").show();
         $("#directions").empty();
         $("#directions").append("GO!")
-        console.log("It has been 10 seconds");
         chooseWord();
-        console.log(chosenWord);
         $("#timer").html("Time Left in the Game: " + gameTime);
         newTimer = setInterval(gameCountdown, 1000);
-
         function gameCountdown() {
             gameTime--;
             $("#timer").html("Time Left in the Game: " + gameTime);
@@ -102,6 +108,30 @@ $(document).ready(function () {
     };
 
     $("#wordGuess").on("click", function () {
+        // let playerAguess = $("#userGuess").val().trim().toLowerCase();
+        // let playerBguess = $("#userGuess").val().trim().toLowerCase();
+        // let frm = document.getElementsByName('gameForm')[0];
+        // if (playerAguess === chosenWord) {
+        //     playerAScore++
+        //     $("#playerAscore").append(playerA + ": " + playerAScore);
+        //     chooseWord();
+        //     frm.reset();
+        //     database.ref().set({
+        //         playerAScore: playerAScore,
+        //         playerBScore: playerBScore
+        //         })
+        // } else if (playerBguess === chosenWord) {
+        //     playerBScore++
+        //     $("#playerBscore").append(playerB + ": " + playerBScore);
+        //     chooseWord();
+        //     frm.reset();
+        //     database.ref().set({
+        //         playerAScore: playerAScore,
+        //         playerBScore: playerBScore
+        //     })
+        // } else {
+        //     frm.reset();
+        // };
         let userGuess = $("#userGuess").val().trim().toLowerCase();
         let frm = document.getElementsByName('gameForm')[0];
         if (userGuess === chosenWord) {
@@ -115,6 +145,8 @@ $(document).ready(function () {
         } else {
             frm.reset();
         };
+
+
 
     });
 
@@ -131,11 +163,9 @@ $(document).ready(function () {
 
     function loading() {
         $("#playModal").hide();
-        createGame()
         let counter = 10;
         $("#userGuessBox").hide();
         timer = setInterval(countDown, 1000);
-
         function countDown() {
             counter--;
             $("#timer").html("Time till start: " + counter);
@@ -151,16 +181,20 @@ $(document).ready(function () {
         modal = $("#myModal");
         message = $("#modalWinner");
         message.empty();
-        message.append("We have a winner! Final Score: " + score);
+
+        if (playerAScore > playerBScore) {
+        message.append("We have a winner!" + playerA + "Final Score: " + playerAScore);
+        }
+        if (playerBScore > playerAScore) {
+            message.append("We have a winner!" + playerB + "Final Score: " + playerBScore);
+        }
         modal.show();
         $("#playAgain").on("click", function () {
-            console.log("This button was clicked");
             modal.hide();
             location.reload();
         });
 
         $("#closeBtn").on("click", function () {
-            console.log("I");
             modal.hide();
             location.reload();
         });
