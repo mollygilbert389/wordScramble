@@ -1,96 +1,84 @@
 body {
-    font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body::after {
-    content: "";
-    background: url("../questionMarks.jpg");
-    opacity: 0.2;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: -1; 
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+  content: "";
+  background: url("../questionMarks.jpg");
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1; 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .boxStyle {
-    background-color: lightcoral;
-    margin: 10px;
-    text-align: center;
-    margin-left: 15%;
-    margin-right: 15%;
-    border-radius: 8px;
-    border-style: none none solid none;
-    border-color: rgb(71, 70, 67);
-    padding: 10px;
+  background-color: lightcoral;
+  margin: 10px;
+  text-align: center;
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 8px;
+  border-style: none none solid none;
+  border-color: rgb(71, 70, 67);
+  padding: 10px;
 }
 
 #directions {
-    margin-top: 10%;
+  margin-top: 10%;
 }
 
 #displayBox {
-    font-size: 25px;
+  font-size: 25px;
 }
 
 /* Modal Styling */
 .modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-  }
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
 
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    padding-top: 50px;
-    padding-bottom: 50px;
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border-radius: 8px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.clicky {
     border-radius: 8px;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .clicky {
-      border-radius: 8px;
-      background-color:  lightcoral;
-      font-family: 'Montserrat', sans-serif;
-      border-style: none;
-      padding: 5px;
-      display: block;
-      margin: auto;
-      border-style: none none solid none;
-      border-color: rgb(71, 70, 67);
-  }
-
-  .clickyGame {
-    background-color: rgb(91, 190, 247);
-    border-radius: 8px;
+    background-color:  lightcoral;
     font-family: 'Montserrat', sans-serif;
     border-style: none;
     padding: 5px;
@@ -98,23 +86,49 @@ body::after {
     margin: auto;
     border-style: none none solid none;
     border-color: rgb(71, 70, 67);
-    margin-top: 10px;
 }
 
-  /* play button modal styling */
-  #playModalContent {
-    margin-top: 9%;
-    padding-top: 110px;
-    padding-bottom: 110px;
-    background-color: rgb(91, 190, 247);
-  }
+.clickyGame {
+  background-color: rgb(91, 190, 247);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  border-style: none;
+  padding: 5px;
+  display: block;
+  margin: auto;
+  border-style: none none solid none;
+  border-color: rgb(71, 70, 67);
+  margin-top: 10px;
+}
 
-#userNameModal {
-  z-index: 10;
-  text-align: center;
+/* play button modal styling */
+#playModalContent {
+  margin-top: 9%;
+  padding-top: 110px;
+  padding-bottom: 110px;
   background-color: rgb(91, 190, 247);
 }
 
+#userNameModal {
+z-index: 10;
+text-align: center;
+background-color: rgb(91, 190, 247);
+}
+
 input{
-  margin-bottom: 10px;
+margin-bottom: 10px;
+}
+
+#guessBoxes {
+  display: flex;
+}
+
+#gameFormA {
+  margin-right: 15%;
+  width: 10px;
+}
+
+#gameFormB {
+  margin-left: 15%;
+  width: 10px;
 }

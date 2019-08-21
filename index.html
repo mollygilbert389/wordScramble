@@ -50,12 +50,24 @@
 
     <div class="boxStyle" id="displayBox">Your scrambled word will appear here!</div>
 
-    <div class="boxStyle" id="userGuessBox">
-        <form name="gameForm" onsubmit="return false">
-            <input id="userGuess" type="text" name="guess" placeholder="You type here">
+    <div id="guessBoxes">
+    <div class="boxStyle" id="playerAGuessBox">
+        <form name="gameFormA" onsubmit="return false">
+            <div>Player A Guess box!</div>
+            <input id="playerAGuess" type="text" name="guess" placeholder="You type here">
 
             <input id="wordGuess" type="reset" value="Submit">
         </form>
+    </div>
+
+    <div class="boxStyle" id="playerBGuessBox">
+        <form name="gameFormB" onsubmit="return false">
+            <div>Player B Guess box!</div>
+            <input id="playerBGuess" type="text" name="guess" placeholder="You type here">
+
+            <input id="wordGuess" type="reset" value="Submit">
+        </form>
+    </div>
     </div>
 
     <div class="boxStyle" id="playerAscore">Score:</div>

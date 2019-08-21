@@ -12,7 +12,18 @@ $(document).ready(function () {
     let chosenWord = "";
     let playerAScore = 0;
     let playerBScore = 0;
-    let players = [];
+    let playerA = "";
+    let playerB = "";
+    let playerAguess = "";
+    let playerBguess = "";
+    // let players = [];
+
+    // let players= {
+    //     name: "",
+    //     playerAscore: playerAScore,
+    //     playerBScore: playerBScore,
+    //     opponent: ""
+    // }
 
     //DataBase
     const firebaseConfig = {
@@ -26,8 +37,6 @@ $(document).ready(function () {
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    // const database = firebase.database();
-    // ref = database.ref("/play")
 
     //GAME FUNCTION
     $("#userNameModal").show();
@@ -50,42 +59,50 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     function createGame() {
-        players = [];
-        $("#createGame").on("click", function(){
-        firebase.database().ref().push({
-            myDisplayName: myDisplayName,
-            opponent: "Nothing Yet",
-            playerAScore: playerAScore,
-            playerBScore: playerBScore
+        $("#createGame").on("click", function () {
+            firebase.database().ref().push({
+                players: {
+                    name: myDisplayName,
+                    playerAScore: 0,
+                    playerBScore: 0,
+                    opponent: "empty"
+                }
             });
-    })
-    firebase.database().ref().on("child_added", function(childsnapshot){
-        $("#linkdiv").append("<button class='clickyGame' data-name='" + childsnapshot.val().myDisplayName + "'" + ">" + childsnapshot.val().myDisplayName + "'s Game " + "</button>")
-        console.log(childsnapshot.val().myDisplayName)
-        //figure out why undefined buttons are appearing
-        $(".clickyGame").on("click", function(){
-        name = $(this).data("name")
-        players.push(name)
-        joinGame()
         })
-    })
+
+        firebase.database().ref().on("child_added", function(snap) {
+            $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>")
+
+            $(".clickyGame").on("click", function () {
+                joinGame()
+            })
+        })
 
     }
 
     function joinGame() {
-        let playerA = players[0]
-        let playerB = myDisplayName
-        if (playerA != playerB) {
+
+        firebase.database().ref().on("child_added", function (snap) {
+            let playerA = snap.val().players.name
+            let playerB = myDisplayName
             firebase.database().ref().set({
-            myDisplayName: playerA,
-            opponent: playerB,
-            playerAScore: playerAScore,
-            playerBScore: playerBScore
-        });
-            loading();
-        } else {
-            alert("You can't play yourself!")
-        }
+                players: {
+                    name: playerA,
+                    playerAscore: 0,
+                    playerBscore: 0,
+                    opponent: playerB
+                }
+            });
+
+            if (playerA != playerB) {
+                loading()
+            } else {
+                alert("You cannot play your own game!")
+            }
+
+        })
+
+
     } 
 
     function playGame() {
@@ -108,46 +125,29 @@ $(document).ready(function () {
     };
 
     $("#wordGuess").on("click", function () {
-        // let playerAguess = $("#userGuess").val().trim().toLowerCase();
-        // let playerBguess = $("#userGuess").val().trim().toLowerCase();
-        // let frm = document.getElementsByName('gameForm')[0];
-        // if (playerAguess === chosenWord) {
-        //     playerAScore++
-        //     $("#playerAscore").append(playerA + ": " + playerAScore);
-        //     chooseWord();
-        //     frm.reset();
-        //     database.ref().set({
-        //         playerAScore: playerAScore,
-        //         playerBScore: playerBScore
-        //         })
-        // } else if (playerBguess === chosenWord) {
-        //     playerBScore++
-        //     $("#playerBscore").append(playerB + ": " + playerBScore);
-        //     chooseWord();
-        //     frm.reset();
-        //     database.ref().set({
-        //         playerAScore: playerAScore,
-        //         playerBScore: playerBScore
-        //     })
-        // } else {
-        //     frm.reset();
-        // };
-        let userGuess = $("#userGuess").val().trim().toLowerCase();
-        let frm = document.getElementsByName('gameForm')[0];
-        if (userGuess === chosenWord) {
-            score++;
-            $("#score").empty();
-            $("#score").append("Score: " + score);
-
-            console.log(score);
+        let playerAguess = $("#playerAGuess").val().trim().toLowerCase();
+        let playerBguess = $("#playerBGuess").val().trim().toLowerCase();
+        let frmA = document.getElementsByName('gameFormA')[0];
+        let frmB = document.getElementsByName('gameFormB')[0];
+        if (playerAguess === chosenWord) {
+            playerAScore++
+            $("#playerAscore").empty();
+            $("#playerAscore").append(playerA + "Score: " + playerAScore);
             chooseWord();
-            frm.reset();
+            frmA.reset();
         } else {
-            frm.reset();
-        };
-
-
-
+            frmA.reset();
+        }
+        
+        if (playerBguess === chooseWord) {
+            playerBScore++
+            $("#playerBscore").empty();
+            $("#playerBscore").append(playerB + "Score: " + playerBScore);
+            chooseWord();
+            frmB.reset();
+        } else {
+            frmB.rest();
+        }
     });
 
     function chooseWord() {
@@ -187,6 +187,9 @@ $(document).ready(function () {
         }
         if (playerBScore > playerAScore) {
             message.append("We have a winner!" + playerB + "Final Score: " + playerBScore);
+        }
+        if (playerBScore === playerAScore) {
+            message.append("There was a tie!");
         }
         modal.show();
         $("#playAgain").on("click", function () {
