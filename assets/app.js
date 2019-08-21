@@ -132,17 +132,16 @@ $(document).ready(function () {
         if (playerAguess === chosenWord) {
             playerAScore++
             $("#playerAscore").empty();
-            $("#playerAscore").append(playerA + "Score: " + playerAScore);
+            $("#playerAscore").append(playerA + ": " + playerAScore);
             chooseWord();
             frmA.reset();
         } else {
             frmA.reset();
         }
-        
         if (playerBguess === chooseWord) {
             playerBScore++
             $("#playerBscore").empty();
-            $("#playerBscore").append(playerB + "Score: " + playerBScore);
+            $("#playerBscore").append(playerB + ": " + playerBScore);
             chooseWord();
             frmB.reset();
         } else {
