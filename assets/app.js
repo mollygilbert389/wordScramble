@@ -1,13 +1,9 @@
-//create a login?
-//click "play" loader "waiting for other players starts to load" to get players send them this link:x
-
-//fun additional rules?
 
 $(document).ready(function () {
 
     //VARIABLE LIST
 
-    const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"]
+    const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
 
     let chosenWord = "";
     let playerAScore = 0;
@@ -16,14 +12,13 @@ $(document).ready(function () {
     let playerB = "";
     let playerAguess = "";
     let playerBguess = "";
-    // let players = [];
 
-    // let players= {
-    //     name: "",
-    //     playerAscore: playerAScore,
-    //     playerBScore: playerBScore,
-    //     opponent: ""
-    // }
+    let players= {
+        name: "",
+        playerAscore: playerAScore,
+        playerBScore: playerBScore,
+        opponent: ""
+    }
 
     //DataBase
     const firebaseConfig = {
@@ -41,11 +36,11 @@ $(document).ready(function () {
     //GAME FUNCTION
     $("#userNameModal").show();
     $("#userEnter").on("click", function () {
-    myDisplayName = $("#userName").val().trim();
+        myDisplayName = $("#userName").val().trim();
         if (myDisplayName != "") {
             $("#userNameModal").hide();
             $("#linkdiv").empty();
-            createGame()
+            createGame();
         }
         else {
             alert("Please enter a username to play");
@@ -68,23 +63,21 @@ $(document).ready(function () {
                     opponent: "empty"
                 }
             });
-        })
-
-        firebase.database().ref().on("child_added", function(snap) {
-            $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>")
-
-            $(".clickyGame").on("click", function () {
-                joinGame()
-            })
-        })
-
-    }
-
-    function joinGame() {
+        });
 
         firebase.database().ref().on("child_added", function (snap) {
-            let playerA = snap.val().players.name
-            let playerB = myDisplayName
+            $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
+
+            $(".clickyGame").on("click", function () {
+                joinGame();
+            });
+        });
+    };
+
+    function joinGame() {
+        firebase.database().ref().on("child_added", function (snap) {
+            let playerA = snap.val().players.name;
+            let playerB = myDisplayName;
             firebase.database().ref().set({
                 players: {
                     name: playerA,
@@ -95,21 +88,19 @@ $(document).ready(function () {
             });
 
             if (playerA != playerB) {
-                loading()
+                loading();
             } else {
-                alert("You cannot play your own game!")
-            }
+                alert("You cannot play your own game!");
+            };
 
-        })
-
-
-    } 
+        });
+    };
 
     function playGame() {
         let gameTime = 60;
         $("#userGuessBox").show();
         $("#directions").empty();
-        $("#directions").append("GO!")
+        $("#directions").append("GO!");
         chooseWord();
         $("#timer").html("Time Left in the Game: " + gameTime);
         newTimer = setInterval(gameCountdown, 1000);
@@ -124,33 +115,34 @@ $(document).ready(function () {
 
     };
 
-    $("#wordGuess").on("click", function () {
+    $(".wordGuess").on("click", function () {
         let playerAguess = $("#playerAGuess").val().trim().toLowerCase();
         let playerBguess = $("#playerBGuess").val().trim().toLowerCase();
         let frmA = document.getElementsByName('gameFormA')[0];
         let frmB = document.getElementsByName('gameFormB')[0];
         if (playerAguess === chosenWord) {
-            playerAScore++
+            playerAScore++;
             $("#playerAscore").empty();
-            $("#playerAscore").append(playerA + ": " + playerAScore);
+            $("#playerAscore").append(playerA + "Score: " + playerAScore);
             chooseWord();
             frmA.reset();
         } else {
             frmA.reset();
-        }
-        if (playerBguess === chooseWord) {
-            playerBScore++
+        };
+
+        if (playerBguess === chosenWord) {
+            playerBScore++;
             $("#playerBscore").empty();
-            $("#playerBscore").append(playerB + ": " + playerBScore);
+            $("#playerBscore").append(playerB + "Score: " + playerBScore);
             chooseWord();
             frmB.reset();
         } else {
             frmB.rest();
-        }
+        };
     });
 
     function chooseWord() {
-        chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)]
+        chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
         $("#displayBox").empty();
         chosenWord = chosenWord.toLowerCase();
         scrambledWord = chosenWord.split("");
@@ -182,10 +174,10 @@ $(document).ready(function () {
         message.empty();
 
         if (playerAScore > playerBScore) {
-        message.append("We have a winner!" + playerA + "Final Score: " + playerAScore);
+            message.append("We have a winner!" + playerA + " Final Score: " + playerAScore);
         }
         if (playerBScore > playerAScore) {
-            message.append("We have a winner!" + playerB + "Final Score: " + playerBScore);
+            message.append("We have a winner!" + playerB + " Final Score: " + playerBScore);
         }
         if (playerBScore === playerAScore) {
             message.append("There was a tie!");
