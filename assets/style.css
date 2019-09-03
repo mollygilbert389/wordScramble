@@ -132,3 +132,11 @@ margin-bottom: 10px;
   margin-left: 15%;
   width: 10px;
 }
+
+.score {
+  background-color: rgb(91, 190, 247);
+}
+
+.names {
+  margin: 5px;
+}

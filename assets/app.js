@@ -1,25 +1,6 @@
 
 $(document).ready(function () {
 
-    //VARIABLE LIST
-
-    const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
-
-    let chosenWord = "";
-    let playerAScore = 0;
-    let playerBScore = 0;
-    let playerA = "";
-    let playerB = "";
-    let playerAguess = "";
-    let playerBguess = "";
-
-    let players= {
-        name: "",
-        playerAscore: playerAScore,
-        playerBScore: playerBScore,
-        opponent: ""
-    }
-
     //DataBase
     const firebaseConfig = {
         apiKey: "AIzaSyBk-HzAE2olUa1KlLCywC131FRIqkU9Yjg",
@@ -32,6 +13,30 @@ $(document).ready(function () {
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+
+    //VARIABLE LIST
+
+    const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
+
+    let chosenWord = "";
+    let playerAScore = 0;
+    let playerBScore = 0;
+    let playerA = "";
+    let playerB = "";
+    let playerAguess = "";
+    let playerBguess = "";
+    playerNum =0;
+    // database = firebase.database()
+    // gameData = database
+
+    let players= {
+        name: "",
+        playerAscore: playerAScore,
+        playerBScore: playerBScore,
+        opponent: ""
+    }
+
+
 
     //GAME FUNCTION
     $("#userNameModal").show();
@@ -54,19 +59,23 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     function createGame() {
+        let playerNum = 1;
         $("#createGame").on("click", function () {
             firebase.database().ref().push({
                 players: {
                     name: myDisplayName,
                     playerAScore: 0,
                     playerBScore: 0,
-                    opponent: "empty"
+                    opponent: "empty",
+                    playerNum: 1
                 }
             });
+            loading()
         });
 
         firebase.database().ref().on("child_added", function (snap) {
             $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
+
 
             $(".clickyGame").on("click", function () {
                 joinGame();
@@ -75,6 +84,7 @@ $(document).ready(function () {
     };
 
     function joinGame() {
+        let playerNum = 2
         firebase.database().ref().on("child_added", function (snap) {
             let playerA = snap.val().players.name;
             let playerB = myDisplayName;
@@ -83,13 +93,22 @@ $(document).ready(function () {
                     name: playerA,
                     playerAscore: 0,
                     playerBscore: 0,
-                    opponent: playerB
+                    opponent: playerB,
+                    playerNum: 2
                 }
             });
 
+            $("#playerANameBox").empty()
+            $("#playerBNameBox").empty()
+            $("#playerANameBox").append(playerA + "'s Guess Box");
+            $("#playerBNameBox").append(playerB + "'s Guess Box");
+
+
             if (playerA != playerB) {
                 loading();
-            } else {
+            } 
+            
+            else {
                 alert("You cannot play your own game!");
             };
 
@@ -114,6 +133,7 @@ $(document).ready(function () {
         };
 
     };
+
 
     $(".wordGuess").on("click", function () {
         let playerAguess = $("#playerAGuess").val().trim().toLowerCase();
@@ -153,6 +173,39 @@ $(document).ready(function () {
     };
 
     function loading() {
+
+        firebase.database().ref().on("child_added", function(snap) {
+            currentPlayers = snap.numChildren();
+          
+            playerOneExists = snapshot.child("1").exists();
+          
+        //     // Player data objects
+        //     playerOneData = snapshot.child("1").val();
+        //     playerTwoData = snapshot.child("2").val();
+          
+
+        //     if (playerOneExists) {
+        //         let playerNum = 1
+              
+        //     } else {
+        //       // If there is no player 1, clear win/loss data and show waiting
+            
+        //     }
+          
+        //     // If theres a player 2, fill in name and win/loss data
+        //     if (playerTwoExists) {
+        //       $("#player2-name").text(playerTwoData.name);
+        //       $("#player2-wins").text("Wins: " + playerTwoData.wins);
+        //       $("#player2-losses").text("Losses: " + playerTwoData.losses);
+        //     } else {
+        //       // If no player 2, clear win/loss and show waiting
+        //       $("#player2-name").text("Waiting for Player 2");
+        //       $("#player2-wins").empty();
+        //       $("#player2-losses").empty();
+        //     }
+          });
+
+      if (playerNum === 2) {  
         $("#playModal").hide();
         let counter = 10;
         $("#userGuessBox").hide();
@@ -165,6 +218,17 @@ $(document).ready(function () {
                 playGame();
             };
         };
+
+    } else {
+        console.log("only 1 player in the game")
+        $("#playModal").hide();
+        $("#userGuessBox").hide();
+        $("#timer").empty()
+        $("#timer").append("Countdown will appear here. ")
+        $("#directions").empty()
+        $("#directions").append("Waiting for another player to join. Hold tight!")
+        // loading();
+    }
 
     };
 
