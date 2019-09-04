@@ -9,13 +9,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="assets/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-    
-
 
 </head>
 
 <body>
-    
+
     <div id="userNameModal" class="modal">
         <div class="modal-content">
             <h1>In order to play Word Scramble enter a username!</h1>
@@ -27,55 +25,53 @@
     <div id="playModal" class="modal">
         <div id="playModalContent" class="modal-content">
             <div class="boxStyle" id="modalDirections">
-                Game Rules and breakdown: Click an availible player in the table below, should they accept your challenge you will have 1 minute to unscramble as many words as possible. Your opponent will also be competeing against you for every word. If you guess the word correctly
-                first you get a point and the next word will appear. If no one appears below, go ahead and create a new game!
+                Game Rules and breakdown: Click an availible player in the table below, should they accept your
+                challenge you will have 1 minute to unscramble as many words as possible. Your opponent will also be
+                competeing against you for every word. If you guess the word correctly
+                first you get a point and the next word will appear. If no one appears below, go ahead and create a new
+                game!
             </div>
 
             <button id="createGame" class="clicky">Create Game</button>
 
-            <div class="boxStyle" id="linkdiv"><p class="opptitles">Display Name: <span id="challengename"></span></p>
+            <div class="boxStyle" id="linkdiv">
+                <p class="opptitles">Display Name: <span id="challengename"></span></p>
                 <div id="btn-center">
                     <button id="challenge" class="clicky">Challenge</button></div>
             </div>
-
         </div>
-
     </div>
 
-    <div class="boxStyle" id="directions">You have entered the game! You will now have 10 seconds to prepare. Rules: you will be competing with another play to guess the correct word from the scrambled letters below. Once a player guesses the correct word a new word will appear. Good Luck!</div>
+    <div class="boxStyle" id="directions">You have entered the game! You will now have 10 seconds to prepare. Rules: you
+        will be competing with another play to guess the correct word from the scrambled letters below. Once a player
+        guesses the correct word a new word will appear. Good Luck!</div>
 
-
-    <!-- Game Play Screen -->
     <div class="boxStyle" id="timer">Time till start: 10</div>
 
     <div class="boxStyle" id="displayBox">Your scrambled word will appear here!</div>
 
     <div id="guessBoxes">
-    <div class="boxStyle" id="playerAGuessBox">
-        <form name="gameFormA" onsubmit="return false">
-            <div class="names" id="playerANameBox">Player A Guess box!</div>
-            <input id="playerAGuess" type="text" name="guess" placeholder="You type here">
+        <div class="boxStyle" id="playerAGuessBox">
+            <form name="gameFormA" onsubmit="return false">
+                <div class="names" id="playerANameBox">Player A Guess box!</div>
+                <input id="playerAGuess" type="text" name="guess" placeholder="You type here">
 
-            <input class="wordGuess" type="submit" value="Submit">
-        </form>
-        <div class="boxStyle score" id="playerAscore">Score:</div>
+                <input class="wordGuess" type="submit" value="Submit">
+            </form>
+            <div class="boxStyle score" id="playerAscore">Score:</div>
+        </div>
+
+        <div class="boxStyle" id="playerBGuessBox">
+            <form name="gameFormB" onsubmit="return false">
+                <div class="names" id="playerBNameBox">Player B Guess box!</div>
+                <input id="playerBGuess" type="text" name="guess" placeholder="You type here">
+
+                <input class="wordGuess" type="submit" value="Submit">
+            </form>
+            <div class="boxStyle score" id="playerBscore">Score:</div>
+        </div>
     </div>
 
-    <div class="boxStyle" id="playerBGuessBox">
-        <form name="gameFormB" onsubmit="return false">
-            <div class="names" id="playerBNameBox">Player B Guess box!</div>
-            <input id="playerBGuess" type="text" name="guess" placeholder="You type here">
-
-            <input class="wordGuess" type="submit" value="Submit">
-        </form>
-        <div class="boxStyle score" id="playerBscore">Score:</div>
-    </div>
-    </div>
-
-    
-    
-
-    <!-- Winner Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeBtn">&times;</span>
@@ -91,4 +87,5 @@
 <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
 </html>
