@@ -70,7 +70,7 @@ $(document).ready(function () {
     };
 
     function playGame() {
-        let gameTime = 60;
+        let gameTime = 10;
         $("#userGuessBox").show();
         $("#directions").empty();
         $("#directions").append("GO!");
@@ -194,16 +194,27 @@ $(document).ready(function () {
         modal = $("#myModal");
         message = $("#modalWinner");
         message.empty();
+        database.ref().on("value", function(snap) {
+            let ascore = snap.child("score/twoScore").val();
+            let bscore = snap.child("score/oneScore").val();
+            let OGname = snap.child("players/name").val();
+            let opponentName = snap.child("players/opponent").val();
+            console.log(ascore)
+            console.log(bscore)
+            console.log(OGname)
+            console.log(opponentName)
 
-        if (playerAScore > playerBScore) {
-            message.append("We have a winner!" + playerA + " Final Score: " + playerAScore);
-        }
-        if (playerBScore > playerAScore) {
-            message.append("We have a winner!" + playerB + " Final Score: " + playerBScore);
-        }
-        if (playerBScore === playerAScore) {
-            message.append("There was a tie!");
-        }
+            if (ascore > bscore) {
+                message.append("We have a winner!" + OGname + " Final Score: " + ascore);
+            }
+            if (bscore > ascore) {
+                message.append("We have a winner!" + opponentName + " Final Score: " + bscore);
+            }
+            if (bscore === ascore) {
+                message.append("There was a tie!");
+            }
+        })
+
         modal.show();
         $("#playAgain").on("click", function () {
             modal.hide();
