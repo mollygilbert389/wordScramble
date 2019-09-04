@@ -17,16 +17,15 @@ $(document).ready(function () {
 
     const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
 
-    let chosenWord = "";
+    // let chosenWord = "";
     let playerAScore = 0;
     let playerBScore = 0;
-    // let playerA = "";
-    // let playerB = "";
     const database = firebase.database();
 
     //GAME START
     $("#userNameModal").show();
-    $("#userEnter").on("click", function() {
+    $("#userEnter").on("click", function(e) {
+        e.preventDefault()
         myDisplayName = $("#userName").val().trim();
         if (myDisplayName != "") {
             $("#userNameModal").hide();
@@ -36,7 +35,14 @@ $(document).ready(function () {
                 alert("Please enter a username to play");
                 };
 
-    });
+        });
+
+    $("#userName").keypress(function(e) {
+        if (e.which === 13) {
+            $('#userEnter').click();
+            };
+        });
+
     $("#playModal").show();
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,13 +77,11 @@ $(document).ready(function () {
         function chooseWord() {
             let chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
             chosenWord = chosenWord.toLowerCase();
-            database.ref("word/chosenWord").set(chosenWord)
-            console.log(chosenWord)
+            database.ref("word/chosenWord").set(chosenWord);
     
             scrambledWord = chosenWord.split("");
             scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
             database.ref("word/scrambledWord").set(scrambledWord);
-            console.log(scrambledWord)
     
             database.ref("word").on("value", function(snap) {
                 $("#displayBox").empty();
@@ -111,10 +115,21 @@ $(document).ready(function () {
                 };
             };
 
+        $("#playerAGuess").keypress(function(e) {
+            if (e.which === 13) {
+                $('.wordGuess').click();
+                };
+            });
+
+        $("#playerBGuess").keypress(function(e) {
+            if (e.which === 13) {
+                $('.wordGuess').click();
+                };
+            });
+
         $(".wordGuess").on("click", function () {   
             database.ref("word").on("value", function(snap) {
                 let chosenWord = snap.child("chosenWord").val();
-                console.log(chosenWord)
 
                 let playerAguess = $("#playerAGuess").val().trim().toLowerCase();
                 let playerBguess = $("#playerBGuess").val().trim().toLowerCase();
@@ -164,11 +179,11 @@ $(document).ready(function () {
             if (playerReady === "1") {
                 $("#playModal").hide();
                 $("#userGuessBox").hide();
-                $("#timer").empty()
-                $("#timer").append("Countdown will appear here. ")
-                $("#directions").empty()
-                $("#directions").append("Waiting for another player to join. Hold tight!")
-                $("#playerANameBox").empty()
+                $("#timer").empty();
+                $("#timer").append("Countdown will appear here. ");
+                $("#directions").empty();
+                $("#directions").append("Waiting for another player to join. Hold tight!");
+                $("#playerANameBox").empty();
                 $("#playerANameBox").append(playerOneName + "'s Guess Box");
 
             } else if (playerReady === "2") {
@@ -208,10 +223,10 @@ $(document).ready(function () {
 
             if (ascore > bscore) {
                 message.append("We have a winner! " + OGname + " Final Score: " + ascore);
-            }
+            };
             if (bscore > ascore) {
                 message.append("We have a winner! " + opponentName + " Final Score: " + bscore);
-            }
+            };
             if (bscore === ascore) {
                 message.append("There was a tie!");
             };
