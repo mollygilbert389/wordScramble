@@ -22,19 +22,7 @@ $(document).ready(function () {
     let playerBScore = 0;
     let playerA = "";
     let playerB = "";
-    let playerAguess = "";
-    let playerBguess = "";
-    let playerNum =0;
     const database = firebase.database()
-
-    // let players = {
-    //     name: "",
-    //     playerAscore: playerAScore,
-    //     playerBScore: playerBScore,
-    //     opponent: ""
-    // }
-
-
 
     //GAME START
     $("#userNameModal").show();
@@ -90,13 +78,14 @@ $(document).ready(function () {
         $("#timer").html("Time Left in the Game: " + gameTime);
 
         database.ref().child("score").set({
-            playerAscore: 0,
-            playerBscore: 0
+            oneScore: 0,
+            twoScore: 0
         })
 
         newTimer = setInterval(gameCountdown, 1000);
         function gameCountdown() {
             gameTime--;
+            checkScore()
             $("#timer").html("Time Left in the Game: " + gameTime);
             if (gameTime <= 0) {
                 clearInterval(newTimer);
@@ -113,8 +102,7 @@ $(document).ready(function () {
             if (playerAguess === chosenWord) {
                 playerAScore++
                 chooseWord()
-                database.ref("/score").child("playerAscore").set(playerAScore)
-                checkScore()
+                database.ref("/score").child("oneScore").set(playerAScore)
                 frmA.reset();
             } else {
                 frmA.reset();
@@ -123,8 +111,7 @@ $(document).ready(function () {
             if (playerBguess === chosenWord) {
                 playerBScore++
                 chooseWord();
-                database.ref("/score").child("playerBscore").set(playerBScore)
-                checkScore()
+                database.ref("/score").child("twoScore").set(playerBScore)
                 frmB.reset();
     
             } else {
@@ -137,16 +124,13 @@ $(document).ready(function () {
 
     function checkScore() {
         database.ref("score").on("value", function(snap) {
-            let ascore = snap.child("playerAScore").val();
-
-            let bscore = snap.child("playerBScore").val()
-
             $("#playerAscore").empty();
-            $("#playerAscore").append("Score: " + playeraScore);
             $("#playerBscore").empty();
-            $("#playerBscore").append("Score: " + playerbScore);
+            let ascore = snap.child("twoScore").val();
+            let bscore = snap.child("oneScore").val();
+            $("#playerAscore").append("Score: " + ascore);
+            $("#playerBscore").append("Score: " + bscore);
         })
-       
     }
 
     function chooseWord() {
