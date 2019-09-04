@@ -10,10 +10,10 @@ $(document).ready(function () {
         storageBucket: "wordscramble-f6df6.appspot.com",
         messagingSenderId: "283709291006",
         appId: "1:283709291006:web:87f55c8d8fb4284d"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
     //VARIABLE LIST
 
     const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
@@ -25,11 +25,14 @@ $(document).ready(function () {
     let playerB = "";
     let playerAguess = "";
     let playerBguess = "";
-    playerNum =0;
+    let playerNum =0;
+    const database = firebase.database()
+    // let playerInfo = database.ref("gameInfo")
+
     // database = firebase.database()
     // gameData = database
 
-    let players= {
+    let players = {
         name: "",
         playerAscore: playerAScore,
         playerBScore: playerBScore,
@@ -61,21 +64,22 @@ $(document).ready(function () {
     function createGame() {
         let playerNum = 1;
         $("#createGame").on("click", function () {
-            firebase.database().ref().push({
-                players: {
-                    name: myDisplayName,
-                    playerAScore: 0,
-                    playerBScore: 0,
-                    opponent: "empty",
-                    playerNum: 1
+            database.ref().set({
+                players : {
+                name: myDisplayName,
+                playerAScore: 0,
+                playerBScore: 0,
+                opponent: "empty",
+                playerNum: "1"
                 }
             });
+
             loading()
         });
 
-        firebase.database().ref().on("child_added", function (snap) {
+        database.ref().on("value", function (snap) {
+            $("#linkdiv").empty()
             $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
-
 
             $(".clickyGame").on("click", function () {
                 joinGame();
@@ -84,36 +88,10 @@ $(document).ready(function () {
     };
 
     function joinGame() {
-        let playerNum = 2
-        firebase.database().ref().on("child_added", function (snap) {
-            let playerA = snap.val().players.name;
-            let playerB = myDisplayName;
-            firebase.database().ref().set({
-                players: {
-                    name: playerA,
-                    playerAscore: 0,
-                    playerBscore: 0,
-                    opponent: playerB,
-                    playerNum: 2
-                }
-            });
-
-            $("#playerANameBox").empty()
-            $("#playerBNameBox").empty()
-            $("#playerANameBox").append(playerA + "'s Guess Box");
-            $("#playerBNameBox").append(playerB + "'s Guess Box");
-
-
-            if (playerA != playerB) {
-                loading();
-            } 
-            
-            else {
-                alert("You cannot play your own game!");
-            };
-
-        });
-    };
+        database.ref("/players").child("opponent").set(myDisplayName)
+        database.ref("/players").child("playerNum").set("2")
+        loading()
+    }
 
     function playGame() {
         let gameTime = 60;
@@ -132,34 +110,50 @@ $(document).ready(function () {
             };
         };
 
+        $(".wordGuess").on("click", function () {        
+            let playerAguess = $("#playerAGuess").val().trim().toLowerCase();
+            let playerBguess = $("#playerBGuess").val().trim().toLowerCase();
+            let frmA = document.getElementsByName('gameFormA')[0];
+            let frmB = document.getElementsByName('gameFormB')[0];
+            if (playerAguess === chosenWord) {
+                playerA++;
+                checkScore()
+                chooseWord();
+                frmA.reset();
+            } else {
+                frmA.reset();
+            };
+    
+            if (playerBguess === chosenWord) {
+                playerB++;
+                checkScore()
+                chooseWord();
+                frmB.reset();
+    
+            } else {
+                frmB.reset();
+            };
+    
+        });
+
     };
 
+    function checkScore() {
+        console.log(playerA)
+        console.log(playerB)
 
-    $(".wordGuess").on("click", function () {
-        let playerAguess = $("#playerAGuess").val().trim().toLowerCase();
-        let playerBguess = $("#playerBGuess").val().trim().toLowerCase();
-        let frmA = document.getElementsByName('gameFormA')[0];
-        let frmB = document.getElementsByName('gameFormB')[0];
-        if (playerAguess === chosenWord) {
-            playerAScore++;
+        database.ref("/players").child("playerAScore").set(playerA)
+        database.ref("/players").child("playerBScore").set(playerB)
+
+        database.ref("/players").on("value", function(snap) {
+            let playeraScore = snap.child("playerAScore").val();
+            let playerbScore = snap.child("playerAScore").val()
             $("#playerAscore").empty();
-            $("#playerAscore").append(playerA + "Score: " + playerAScore);
-            chooseWord();
-            frmA.reset();
-        } else {
-            frmA.reset();
-        };
-
-        if (playerBguess === chosenWord) {
-            playerBScore++;
+            $("#playerAscore").append("Score: " + playeraScore);
             $("#playerBscore").empty();
-            $("#playerBscore").append(playerB + "Score: " + playerBScore);
-            chooseWord();
-            frmB.reset();
-        } else {
-            frmB.rest();
-        };
-    });
+            $("#playerBscore").append("Score: " + playerbScore);
+        })
+    }
 
     function chooseWord() {
         chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
@@ -174,61 +168,45 @@ $(document).ready(function () {
 
     function loading() {
 
-        firebase.database().ref().on("child_added", function(snap) {
-            currentPlayers = snap.numChildren();
-          
-            playerOneExists = snapshot.child("1").exists();
-          
-        //     // Player data objects
-        //     playerOneData = snapshot.child("1").val();
-        //     playerTwoData = snapshot.child("2").val();
-          
+        database.ref("/players").on("value", function(snap) {
 
-        //     if (playerOneExists) {
-        //         let playerNum = 1
-              
-        //     } else {
-        //       // If there is no player 1, clear win/loss data and show waiting
-            
-        //     }
-          
-        //     // If theres a player 2, fill in name and win/loss data
-        //     if (playerTwoExists) {
-        //       $("#player2-name").text(playerTwoData.name);
-        //       $("#player2-wins").text("Wins: " + playerTwoData.wins);
-        //       $("#player2-losses").text("Losses: " + playerTwoData.losses);
-        //     } else {
-        //       // If no player 2, clear win/loss and show waiting
-        //       $("#player2-name").text("Waiting for Player 2");
-        //       $("#player2-wins").empty();
-        //       $("#player2-losses").empty();
-        //     }
-          });
+            let playerReady = snap.child("playerNum").val();
+            console.log(playerReady)
+            let playerOneName = snap.child("name").val();
+            let playerTwoName = snap.child("opponent").val();
+        
+            if (playerReady === "1") {
+                $("#playModal").hide();
+                $("#userGuessBox").hide();
+                $("#timer").empty()
+                $("#timer").append("Countdown will appear here. ")
+                $("#directions").empty()
+                $("#directions").append("Waiting for another player to join. Hold tight!")
+                $("#playerANameBox").empty()
+                $("#playerANameBox").append(playerOneName + "'s Guess Box");
 
-      if (playerNum === 2) {  
-        $("#playModal").hide();
-        let counter = 10;
-        $("#userGuessBox").hide();
-        timer = setInterval(countDown, 1000);
-        function countDown() {
-            counter--;
-            $("#timer").html("Time till start: " + counter);
-            if (counter <= 0) {
-                clearInterval(timer);
-                playGame();
-            };
-        };
+            } else if (playerReady === "2") {
+                $("#directions").empty()
+                $("#playerANameBox").empty()
+                $("#directions").append("You have entered the game! You will now have 10 seconds to prepare. Rules: you will be competing with another play to guess the correct word from the scrambled letters below. Once a player guesses the correct word a new word will appear. Good Luck!")
+                $("#playerANameBox").append(playerOneName + "'s Guess Box");
+                $("#playerBNameBox").empty()
+                $("#playerBNameBox").append(playerTwoName + "'s Guess Box");
+                $("#playModal").hide();
+                let counter = 10;
+                $("#userGuessBox").hide();
+                timer = setInterval(countDown, 1000);
+                    function countDown() {
+                    counter--;
+                    $("#timer").html("Time till start: " + counter);
+                    if (counter <= 0) {
+                        clearInterval(timer);
+                        playGame();
+                        };
+                    };
+            }
 
-    } else {
-        console.log("only 1 player in the game")
-        $("#playModal").hide();
-        $("#userGuessBox").hide();
-        $("#timer").empty()
-        $("#timer").append("Countdown will appear here. ")
-        $("#directions").empty()
-        $("#directions").append("Waiting for another player to join. Hold tight!")
-        // loading();
-    }
+        });
 
     };
 
