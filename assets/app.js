@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    //DataBase
     const firebaseConfig = {
         apiKey: "AIzaSyBk-HzAE2olUa1KlLCywC131FRIqkU9Yjg",
         authDomain: "wordscramble-f6df6.firebaseapp.com",
@@ -10,14 +9,11 @@ $(document).ready(function () {
         messagingSenderId: "283709291006",
         appId: "1:283709291006:web:87f55c8d8fb4284d"
       };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
 
-    //VARIABLE LIST
+      firebase.initializeApp(firebaseConfig);
 
     const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
 
-    // let chosenWord = "";
     let playerAScore = 0;
     let playerBScore = 0;
     const database = firebase.database();
@@ -34,7 +30,6 @@ $(document).ready(function () {
             } else {
                 alert("Please enter a username to play");
                 };
-
         });
 
     $("#userName").keypress(function(e) {
@@ -81,6 +76,7 @@ $(document).ready(function () {
     
             scrambledWord = chosenWord.split("");
             scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
+            scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
             database.ref("word/scrambledWord").set(scrambledWord);
     
             database.ref("word").on("value", function(snap) {
@@ -91,6 +87,7 @@ $(document).ready(function () {
             };
 
     function playGame() {
+        database.ref("/players").child("playerNum").set("3");
         let gameTime = 60;
         $("#userGuessBox").show();
         $("#directions").empty();
@@ -186,7 +183,7 @@ $(document).ready(function () {
                 $("#playerANameBox").empty();
                 $("#playerANameBox").append(playerOneName + "'s Guess Box");
 
-            } else if (playerReady === "2") {
+            } if (playerReady === "2") {
                 $("#directions").empty();
                 $("#playerANameBox").empty();
                 $("#directions").append("You have entered the game! You will now have 10 seconds to prepare. Rules: you will be competing with another play to guess the correct word from the scrambled letters below. Once a player guesses the correct word a new word will appear. Good Luck!");
@@ -205,10 +202,10 @@ $(document).ready(function () {
                         playGame();
                         };
                     };
+                } if (playerReady === "3") {
+                    alert("Player already in game. Please choose a different player or create your own game.");
                 };
-
             });
-
         };
 
     function showWinner() {
@@ -243,5 +240,4 @@ $(document).ready(function () {
             location.reload();
         });
     };
-
 });
