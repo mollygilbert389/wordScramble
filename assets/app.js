@@ -81,8 +81,8 @@ $(document).ready(function () {
             database.ref("word/chosenWord").set(chosenWord);
     
             scrambledWord = chosenWord.split("");
-            scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
-            // scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
+            scrambledWord = scrambledWord.sort(function () {return 0.5 - Math.random() }).join('');
+            
             database.ref("word/scrambledWord").set(scrambledWord);
     
             database.ref("word").on("value", function(snap) {

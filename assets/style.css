@@ -82,10 +82,12 @@ body::after {
     font-family: 'Montserrat', sans-serif;
     border-style: none;
     padding: 5px;
-    display: block;
-    margin: auto;
     border-style: none none solid none;
     border-color: rgb(71, 70, 67);
+}
+
+.clicky:hover {
+  background-color: firebrick;
 }
 
 .clickyGame {
@@ -94,11 +96,14 @@ body::after {
   font-family: 'Montserrat', sans-serif;
   border-style: none;
   padding: 5px;
-  display: block;
   margin: auto;
   border-style: none none solid none;
   border-color: rgb(71, 70, 67);
   margin-top: 10px;
+}
+
+.clickyGame:hover {
+  background-color: rgb(22, 161, 241);
 }
 
 /* play button modal styling */
@@ -139,4 +144,35 @@ margin-bottom: 10px;
 
 .names {
   margin: 5px;
+}
+
+.play {
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+#solo {
+  border-radius: 8px;
+  background-color:  lightcoral;
+  font-family: 'Montserrat', sans-serif;
+  border-style: none;
+  padding: 5px;
+  border-style: none none solid none;
+  border-color: rgb(71, 70, 67);
+  margin: 10px;
+  width: 180px;
+}
+
+#solo:hover {
+  background-color: firebrick;
+}
+
+#lobby {
+  text-align: center;
+}
+
+#creategame {
+  width: 180px;
 }
