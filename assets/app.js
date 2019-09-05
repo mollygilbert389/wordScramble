@@ -17,6 +17,7 @@ $(document).ready(function () {
     let playerAScore = 0;
     let playerBScore = 0;
     const database = firebase.database();
+    let playerInGame = false;
 
     //GAME START
     $("#userNameModal").show();
@@ -62,9 +63,14 @@ $(document).ready(function () {
             $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
 
             $(".clickyGame").on("click", function () {
+                let inGame =  snap.child("players/playerNum").val();
+                if (inGame != "3")  {
                 database.ref("/players").child("opponent").set(myDisplayName);
                 database.ref("/players").child("playerNum").set("2");
                 loading();
+                } else {
+                    alert("Sorry this player is currently in game.")
+                    }  
                 });
             });
         };
@@ -76,7 +82,7 @@ $(document).ready(function () {
     
             scrambledWord = chosenWord.split("");
             scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
-            scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
+            // scrambledWord = scrambledWord.sort(function () { return 0.5 - Math.random() }).join('');
             database.ref("word/scrambledWord").set(scrambledWord);
     
             database.ref("word").on("value", function(snap) {
@@ -168,6 +174,7 @@ $(document).ready(function () {
 
 
     function loading() {
+        
         database.ref("/players").on("value", function(snap) {
             let playerReady = snap.child("playerNum").val();
             let playerOneName = snap.child("name").val();
@@ -202,9 +209,7 @@ $(document).ready(function () {
                         playGame();
                         };
                     };
-                } if (playerReady === "3") {
-                    alert("Player already in game. Please choose a different player or create your own game.");
-                };
+                } 
             });
         };
 
