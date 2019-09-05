@@ -176,3 +176,7 @@ margin-bottom: 10px;
 #creategame {
   width: 180px;
 }
+
+#modalWinner {
+  text-align: center;
+}

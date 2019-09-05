@@ -17,7 +17,6 @@ $(document).ready(function () {
     let playerAScore = 0;
     let playerBScore = 0;
     const database = firebase.database();
-    let playerInGame = false;
 
     //GAME START
     $("#userNameModal").show();
@@ -40,10 +39,6 @@ $(document).ready(function () {
         });
 
     $("#playModal").show();
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////FUNCTIONS/////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
     function createGame() {
         $("#createGame").on("click", function() {
