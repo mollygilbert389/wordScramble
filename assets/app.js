@@ -238,11 +238,13 @@ $(document).ready(function () {
         $("#playAgain").on("click", function () {
             modal.hide();
             location.reload();
+            database.ref().onDisconnect().remove()
         });
 
         $("#closeBtn").on("click", function () {
             modal.hide();
             location.reload();
+            database.ref().onDisconnect().remove()
         });
     };
 });
