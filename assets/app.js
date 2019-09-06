@@ -21,7 +21,7 @@ $(document).ready(function () {
     //GAME START
     $("#userNameModal").show();
     $("#userEnter").on("click", function(e) {
-        e.preventDefault()
+        e.preventDefault();
         myDisplayName = $("#userName").val().trim();
         if (myDisplayName != "") {
             $("#userNameModal").hide();
@@ -49,20 +49,18 @@ $(document).ready(function () {
                 playerNum: "1",
                 buttonStatus: "1"
                 }
-                });
-
-                loading();
+            });
+            loading();
         });
 
-    database.ref().on("value", function (snap) {
-        $("#linkdiv").empty();
-        $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
+        database.ref().on("value", function (snap) {
+            $("#linkdiv").empty();
+            $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
 
-        let btnStatus = snap.child("players/buttonStatus").val();
-
-        if (btnStatus === "1"){
-            $("#createGame").hide()
-        }
+            let btnStatus = snap.child("players/buttonStatus").val();
+            if (btnStatus === "1") {
+                $("#createGame").hide();
+            };
 
             $(".clickyGame").on("click", function () {
                 let inGame =  snap.child("players/playerNum").val();
@@ -71,11 +69,11 @@ $(document).ready(function () {
                 database.ref("/players").child("playerNum").set("2");
                 loading();
                 } else {
-                    alert("Sorry this player is currently in game.")
-                    }  
-                });
+                    alert("Sorry this player is currently in game.");
+                };  
             });
-        };
+        });
+    };
 
     function chooseWord() {
         let chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
@@ -84,7 +82,7 @@ $(document).ready(function () {
 
         scrambledWord = chosenWord.split("");
         scrambledWord = scrambledWord.sort(function () {
-            return 0.5 - Math.random() 
+            return 0.5 - Math.random(); 
         }).join('');
 
         database.ref("word/scrambledWord").set(scrambledWord);
@@ -191,14 +189,13 @@ $(document).ready(function () {
 
 
     function loading() {
-
-        let timeOut = 300
+        let timeOut = 300;
         databaseTimeOut = setInterval(databaseRefresh, 1000);
         function databaseRefresh() {
             timeOut--;
             if (timeOut <= 0) {
                 clearInterval(databaseTimeOut);
-                database.ref().onDisconnect().remove()
+                database.ref().onDisconnect().remove();
                 location.reload();
             };
         };
@@ -268,21 +265,21 @@ $(document).ready(function () {
             database.ref("/players").child("playerNum").set("0");
             modal.hide();
             location.reload();
-            database.ref().onDisconnect().remove()
+            database.ref().onDisconnect().remove();
         });
 
         $("#closeBtn").on("click", function () {
             database.ref("/players").child("playerNum").set("0");
             modal.hide();
             location.reload();
-            database.ref().onDisconnect().remove()
+            database.ref().onDisconnect().remove();
         });
 
         database.ref().on("value", function(snap) {
             let gameOver = snap.val();
             if (gameOver === null) {
                 location.reload();
-            }
-        })
+            };
+        });
     };
 });
