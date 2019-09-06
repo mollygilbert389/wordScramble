@@ -10,7 +10,7 @@ $(document).ready(function () {
         appId: "1:283709291006:web:87f55c8d8fb4284d"
       };
 
-      firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 
     const letterBank = ["Soup", "Fruit", "Onion", "Fish", "Strawberry", "Grape", "Carrot", "Apple", "Cake", "Steak", "Salad", "Chicken", "Potato", "Mango", "Chips", "Popcorn", "Peanuts", "Watermelon", "Water", "Cookie", "Brownie", "Bagel", "Pizza", "Salsa", "Cheese", "Eggs", "Bacon", "Candy", "Olive", "Cherry", "Tomato", "Bread", "Orange", "Lemon", "Mustard", "Coffee", "Milk", "Butter", "Pepper", "Pasta", "Rice", "Cereal", "Salt", "Honey", "Garlic", "Beans", "Sugar", "Lettuce", "Ham", "Pork", "Crab", "Shrimp", "Turkey", "Mushroom", "Celery", "Lime", "Nuts", "Pumpkin", "Pecans", "Lamb", "Cream", "Flour", "Granola", "Beef", "Jerky", "Seeds", "Spices", "Yogurt", "Berries", "Vegetable", "Peas", "Vinegar", "Ginger", "Chocolate", "Pastry", "Noodles", "Yeast", "Vanilla", "Dough", "Buttermilk", "Batter", "Rasin", "Caramel", "Cornmeal", "Crackers"];
 
@@ -27,16 +27,16 @@ $(document).ready(function () {
             $("#userNameModal").hide();
             $("#linkdiv").empty();
             createGame();
-            } else {
+        } else {
                 alert("Please enter a username to play");
-                };
-        });
+            };
+    });
 
     $("#userName").keypress(function(e) {
         if (e.which === 13) {
             $('#userEnter').click();
-            };
-        });
+        };
+    });
 
     $("#playModal").show();
 
@@ -51,11 +51,11 @@ $(document).ready(function () {
                 });
 
                 loading();
-            });
+        });
 
-        database.ref().on("value", function (snap) {
-            $("#linkdiv").empty();
-            $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
+    database.ref().on("value", function (snap) {
+        $("#linkdiv").empty();
+        $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
 
             $(".clickyGame").on("click", function () {
                 let inGame =  snap.child("players/playerNum").val();
@@ -70,22 +70,22 @@ $(document).ready(function () {
             });
         };
 
-        function chooseWord() {
-            let chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
-            chosenWord = chosenWord.toLowerCase();
-            database.ref("word/chosenWord").set(chosenWord);
-    
-            scrambledWord = chosenWord.split("");
-            scrambledWord = scrambledWord.sort(function () {return 0.5 - Math.random() }).join('');
-            
-            database.ref("word/scrambledWord").set(scrambledWord);
-    
-            database.ref("word").on("value", function(snap) {
-                $("#displayBox").empty();
-                let scrambledWord = snap.child("scrambledWord").val();
-                $("#displayBox").append(scrambledWord);
-                });
-            };
+    function chooseWord() {
+        let chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
+        chosenWord = chosenWord.toLowerCase();
+        database.ref("word/chosenWord").set(chosenWord);
+
+        scrambledWord = chosenWord.split("");
+        scrambledWord = scrambledWord.sort(function () {return 0.5 - Math.random() }).join('');
+
+        database.ref("word/scrambledWord").set(scrambledWord);
+
+        database.ref("word").on("value", function(snap) {
+            $("#displayBox").empty();
+            let scrambledWord = snap.child("scrambledWord").val();
+            $("#displayBox").append(scrambledWord);
+        });
+    };
 
     function playGame() {
         $("#displayBox").hide();
@@ -100,22 +100,19 @@ $(document).ready(function () {
         database.ref().child("score").set({
             oneScore: 0,
             twoScore: 0
-            });
+        });
 
         database.ref("word").on("value", function(snap) {
             $("#displayBox").empty();
             let scrambledWord = snap.child("scrambledWord").val();
             $("#displayBox").append(scrambledWord);
-            });
+        });
     
-        
-
         let gameTime = 60;
         $("#userGuessBox").show();
         $("#directions").empty();
         $("#directions").append("GO!");
         $("#timer").html("Time Left in the Game: " + gameTime);
-
 
         newTimer = setInterval(gameCountdown, 1000);
 
@@ -127,20 +124,20 @@ $(document).ready(function () {
             if (gameTime <= 0) {
                 clearInterval(newTimer);
                 showWinner();
-                };
             };
+        };
 
         $("#playerAGuess").keypress(function(e) {
             if (e.which === 13) {
                 $('.wordGuess').click();
-                };
-            });
+            };
+        });
 
         $("#playerBGuess").keypress(function(e) {
             if (e.which === 13) {
                 $('.wordGuess').click();
-                };
-            });
+            };
+        });
 
         $(".wordGuess").on("click", function () {   
             database.ref("word").on("value", function(snap) {
@@ -156,22 +153,21 @@ $(document).ready(function () {
                     chooseWord();
                     database.ref("/score").child("oneScore").set(playerAScore);
                     frmA.reset();
-                    } else {
-                        frmA.reset();
-                        };
+                } else {
+                    frmA.reset();
+                };
         
                 if (playerBguess === chosenWord) {
                     playerBScore++;
                     chooseWord();
                     database.ref("/score").child("twoScore").set(playerBScore);
                     frmB.reset();
-                    } else {
-                        frmB.reset();
-                        };
-                });
+                } else {
+                    frmB.reset();
+                };
             });
-
-        };
+        });
+    };
 
     function checkScore() {
         database.ref("score").on("value", function(snap) {
@@ -181,12 +177,11 @@ $(document).ready(function () {
             let bscore = snap.child("twoScore").val();
             $("#playerAscore").append("Score: " + ascore);
             $("#playerBscore").append("Score: " + bscore);
-            });
-        };
+        });
+    };
 
 
     function loading() {
-        
         database.ref("/players").on("value", function(snap) {
             let playerReady = snap.child("playerNum").val();
             let playerOneName = snap.child("name").val();
@@ -213,17 +208,18 @@ $(document).ready(function () {
                 let counter = 10;
                 $("#userGuessBox").hide();
                 timer = setInterval(countDown, 1000);
-                    function countDown() {
+                
+                function countDown() {
                     counter--;
                     $("#timer").html("Time till start: " + counter);
                     if (counter <= 0) {
                         clearInterval(timer);
                         playGame();
-                        };
                     };
-                } 
-            });
-        };
+                };
+            }; 
+        });
+    };
 
     function showWinner() {
         modal = $("#myModal");
