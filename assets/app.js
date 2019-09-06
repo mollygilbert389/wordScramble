@@ -88,23 +88,40 @@ $(document).ready(function () {
             };
 
     function playGame() {
+        $("#displayBox").hide();
+        let chosenWord = letterBank[Math.floor(Math.random() * letterBank.length)];
+        chosenWord = chosenWord.toLowerCase();
+        scrambledWord = chosenWord.split("");
+        scrambledWord = scrambledWord.sort(function () {return 0.5 - Math.random() }).join('');
+        
+        database.ref("word/chosenWord").set(chosenWord);
+        database.ref("word/scrambledWord").set(scrambledWord);
         database.ref("/players").child("playerNum").set("3");
-        let gameTime = 60;
-        $("#userGuessBox").show();
-        $("#directions").empty();
-        $("#directions").append("GO!");
-        chooseWord();
-        $("#timer").html("Time Left in the Game: " + gameTime);
-
         database.ref().child("score").set({
             oneScore: 0,
             twoScore: 0
             });
 
+        database.ref("word").on("value", function(snap) {
+            $("#displayBox").empty();
+            let scrambledWord = snap.child("scrambledWord").val();
+            $("#displayBox").append(scrambledWord);
+            });
+    
+        
+
+        let gameTime = 60;
+        $("#userGuessBox").show();
+        $("#directions").empty();
+        $("#directions").append("GO!");
+        $("#timer").html("Time Left in the Game: " + gameTime);
+
+
         newTimer = setInterval(gameCountdown, 1000);
 
         function gameCountdown() {
             gameTime--;
+            $("#displayBox").show();
             checkScore();
             $("#timer").html("Time Left in the Game: " + gameTime);
             if (gameTime <= 0) {
