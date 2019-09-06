@@ -76,7 +76,9 @@ $(document).ready(function () {
         database.ref("word/chosenWord").set(chosenWord);
 
         scrambledWord = chosenWord.split("");
-        scrambledWord = scrambledWord.sort(function () {return 0.5 - Math.random() }).join('');
+        scrambledWord = scrambledWord.sort(function () {
+            return 0.5 - Math.random() 
+        }).join('');
 
         database.ref("word/scrambledWord").set(scrambledWord);
 
@@ -244,15 +246,24 @@ $(document).ready(function () {
 
         modal.show();
         $("#playAgain").on("click", function () {
+            database.ref("/players").child("playerNum").set("0");
             modal.hide();
             location.reload();
             database.ref().onDisconnect().remove()
         });
 
         $("#closeBtn").on("click", function () {
+            database.ref("/players").child("playerNum").set("0");
             modal.hide();
             location.reload();
             database.ref().onDisconnect().remove()
         });
+
+        database.ref().on("value", function(snap) {
+            let gameOver = snap.val();
+            if (gameOver === null) {
+                location.reload();
+            }
+        })
     };
 });
