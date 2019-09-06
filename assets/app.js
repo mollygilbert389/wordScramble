@@ -46,7 +46,8 @@ $(document).ready(function () {
                 players : {
                 name: myDisplayName,
                 opponent: "empty",
-                playerNum: "1"
+                playerNum: "1",
+                buttonStatus: "1"
                 }
                 });
 
@@ -56,6 +57,12 @@ $(document).ready(function () {
     database.ref().on("value", function (snap) {
         $("#linkdiv").empty();
         $("#linkdiv").append("<button class='clickyGame' data-name='" + snap.val().players.name + "'" + ">" + snap.val().players.name + "'s Game " + "</button>");
+
+        let btnStatus = snap.child("players/buttonStatus").val();
+
+        if (btnStatus === "1"){
+            $("#createGame").hide()
+        }
 
             $(".clickyGame").on("click", function () {
                 let inGame =  snap.child("players/playerNum").val();
