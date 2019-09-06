@@ -191,6 +191,18 @@ $(document).ready(function () {
 
 
     function loading() {
+
+        let timeOut = 300
+        databaseTimeOut = setInterval(databaseRefresh, 1000);
+        function databaseRefresh() {
+            timeOut--;
+            if (timeOut <= 0) {
+                clearInterval(databaseTimeOut);
+                database.ref().onDisconnect().remove()
+                location.reload();
+            };
+        };
+
         database.ref("/players").on("value", function(snap) {
             let playerReady = snap.child("playerNum").val();
             let playerOneName = snap.child("name").val();
